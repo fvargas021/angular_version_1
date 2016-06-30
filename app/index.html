@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <title>New York Times News</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="assets/app.css"/>
+    <link rel="stylesheet" href="assets/app_aux.css"/>
+
+    <style type="text/css">
+        /**
+         * Hide when Angular is not yet loaded and initialized
+         */
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+          display: none !important;
+        }
+    </style>
+
+  </head>
+
+  <body ng-app="starterApp" layout="column" ng-controller="NewController as ul" ng-cloak>
+
+    <md-toolbar layout="row">
+      <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show New List">
+        <md-icon md-svg-icon="menu" ></md-icon>
+      </md-button>
+      <h1 class="h1-margin">Top Stories v1</h1>
+    </md-toolbar>
+
+    <div flex layout="row">
+
+        <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" class="md-whiteframe-z2" >
+          <md-list>
+            <md-list-item ng-repeat="it in ul.news">
+                <md-button ng-click="ul.selectNew(it)" ng-class="{'selected' : it === ul.selected }">
+                  <img class="avatar" ng-src="assets/nyt-t-logo.png">
+                  {{it.title}}
+                </md-button>
+            </md-list-item>
+          </md-list>
+        </md-sidenav>
+
+        <md-content flex id="content">
+          <a href="{{ul.selected.url}}">
+            <img ng-if="ul.selected.multimedia.length !== 0" class="img-margins" src="{{ul.selected.multimedia[0].url}}" alt="No image">
+            <h2>{{ul.selected.title}}</h2>
+          </a>
+          <i>
+            <h5>{{ul.selected.published_date | date : format : longDate}}</h5>
+          </i>
+          <p>{{ul.selected.abstract}}</p>
+          <h5 ng-if="ul.selected.subsection !== ''">
+            {{ "Section:" }} {{ul.selected.section}} / {{ul.selected.subsection}}
+          </h5>
+          <h5 ng-if="ul.selected.subsection == ''">
+            {{ "Section:" }} {{ul.selected.section}} 
+          </h5>
+          <md-button href="{{ul.selected.url}}" class="md-raised md-primary button-margin">Read More...</md-button>
+          <md-divider md-inset style="margin-left: inherit; margin-top: 25px;"></md-divider>
+        </md-content>
+
+    </div>
+
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/angular-animate/angular-animate.js"></script>
+    <script src="../node_modules/angular-aria/angular-aria.js"></script>
+    <script type="text/javascript" src="../node_modules/angular-material/angular-material.js"></script>
+
+    <script src="./src/news/News.js"></script>
+    <script src="./src/news/NewController.js"></script>
+    <script src="./src/news/NewService.js"></script>
+
+    <script src="assets/jquery-3.0.0.min.js"></script>
+
+    <script type="text/javascript">
+
+          angular
+              .module('starterApp', ['ngMaterial', 'news'])
+              .config(function($mdThemingProvider, $mdIconProvider){
+
+                  $mdIconProvider
+                      .defaultIconSet("./assets/svg/avatars.svg", 128)
+                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+                      .icon("share"      , "./assets/svg/share.svg"       , 24)
+                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+
+                      $mdThemingProvider.theme('default')
+                          .primaryPalette('blue')
+                          .accentPalette('red');
+
+              });
+
+    </script>
+
+  </body>
+</html>
